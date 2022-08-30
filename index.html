@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+    <script src="FileSaver.min.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/vue@next"></script>
+
+    <title>Morkovvna preview builder</title>
+</head>
+<body>
+    <input
+        type="file"
+        accept=".gif,.jpg,.jpeg,.png"
+        onchange="onFileSelected(event)"
+    >
+
+    <div
+        id="sheetWrapper"
+        style="
+            width: 600px;
+            height: 600px;
+            border: 1px solid #000;
+        "
+    >
+        <div
+            id="sheet"
+            style="
+                width: 100%;
+                height: 100%;
+                overflow: hidden;
+                position: relative;
+            "
+        >
+            <img
+                draggable="false"
+                id="selectedImage"
+                style="
+                    position: absolute;
+                    top: 0px;
+                    width: 100%;
+                "
+            />
+
+            <div class="brand">
+                <div class="rating">
+                    <img class="rating-item-1" src="carrot.png">
+                    <img class="rating-item-2" src="carrot.png">
+                    <img class="rating-item-3" src="carrot.png">
+                    <img class="rating-item-4" src="carrot.png">
+                    <img class="rating-item-5" src="carrot.png">
+                </div>
+
+                <div class="title">Milk & Madu</div>
+            </div>
+        </div>
+    </div>
+
+    <button onclick="capture()">Get image</button>
+
+    <script>
+        const selectedImageEl = document.getElementById('selectedImage');
+        const sheetEl = document.getElementById('sheet');
+
+        async function onFileSelected(event) {
+            const image = event.target.files[0];
+            const reader = new FileReader();
+            reader.onload = () => {
+                selectedImageEl.src = reader.result;
+            };
+            reader.readAsDataURL(image);
+        }
+
+
+        let isDown = false;
+        let startMouse = 0;
+        let startImageTop = 0;
+
+        const onMouseDown = (event) => {
+            isDown = true;
+            startMouse = event.pageY;
+            startImageTop = Number(window.getComputedStyle(selectedImageEl).top.replace(/[^-\d]/g, ''));
+        }
+
+        const onMouseUp = () => {
+            isDown = false;
+        }
+
+        const onMousemove = (event) => {
+            if (!isDown) {
+                return
+            }
+
+            const move = event.pageY - startMouse;
+            selectedImageEl.style.top = startImageTop + move + 'px'
+        }
+
+        document.addEventListener('mousedown', onMouseDown)
+        document.addEventListener('mouseup', onMouseUp)
+        document.addEventListener('mousemove', onMousemove)
+
+        async function capture() {
+            const canvas = await html2canvas(document.querySelector("#sheet"));
+            canvas.toBlob(function(blob) {
+                saveAs(blob, "Heh.png");
+            });
+        }
+    </script>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        .title {
+            font-family: 'Fredoka One', cursive;
+            font-size: 83px;
+            color: #fff;
+            text-shadow: 0px 4px 0 black;
+            padding: 0 40px;
+            width: 100%;
+            height: 100%;
+            background: transparent;
+            border: 0;
+        }
+
+        .brand {
+            background: #00000080;
+            height: 350px;
+            bottom: 0;
+            position: absolute;
+            width: 100%;
+            padding: 40px 0;
+        }
+    </style>
+</body>
+</html>
