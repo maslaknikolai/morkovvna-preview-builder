@@ -123,10 +123,10 @@ export default defineComponent({
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 600px;
+  height: 100%;
   background-size: 100%;
   background-repeat: no-repeat;
-  width: 600px;
+  width: 100%;
 }
 
 .file-input {
@@ -134,6 +134,7 @@ export default defineComponent({
 }
 
 .select-button {
-  height: 50px;
+  font-size: 50px;
+  padding: 50px;
 }
 </style>

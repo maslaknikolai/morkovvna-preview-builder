@@ -12,25 +12,21 @@
           :titleSize="titleSize"
           :location="location"
           :locationSize="locationSize"
-          :rating="rating"
+          :rating="Number(rating)"
         />
       </div>
     </div>
 
     <div class="fields">
+      <input type="range" min="1" max="5" v-model="rating">
+
       <input
         placeholder="Title"
         type="text"
         class="field"
         v-model="title"
       />
-
-      <input
-        placeholder="Title size"
-        type="number"
-        class="field"
-        v-model="titleSize"
-      />
+      <input type="range" min="140" max="320" v-model="titleSize">
 
       <input
         placeholder="Location"
@@ -39,21 +35,7 @@
         v-model="location"
       />
 
-      <input
-        placeholder="Location size"
-        type="number"
-        class="field"
-        v-model="locationSize"
-      />
-
-      <input
-        placeholder="Rating"
-        type="number"
-        class="field"
-        max="5"
-        min="1"
-        v-model="rating"
-      />
+      <input type="range" min="80" max="220" v-model="locationSize">
 
       <button
         @click="saveImage()"
@@ -85,9 +67,9 @@ export default defineComponent({
     }
 
     const title = ref('Milk & Madu')
-    const titleSize = ref(83)
+    const titleSize = ref(186)
     const location = ref('Canggu')
-    const locationSize = ref(61)
+    const locationSize = ref(130)
     const rating = ref(5)
 
     const resultEl = ref<HTMLElement | null>(null)
@@ -140,9 +122,9 @@ html, body {
 }
 
 .result {
-  width: 600px;
-  height: 600px;
-  zoom: 0.534;
+  width: 1280px;
+  height: 1280px;
+  zoom: 0.25;
   position: relative;
 }
 
@@ -155,9 +137,11 @@ html, body {
   width: 100%;
   padding: 5px;
   font-size: 20px;
+  margin-top: 20px;
 }
 
 .main-button {
+  display: block;
   padding: 10px 20px;
   margin-top: 10px;
   font-size: 20px;

@@ -75,7 +75,7 @@ export default defineComponent({
   width: 100%;
   height: 60%;
   background: rgba(#000, .5);
-  padding: 40px;
+  padding: 80px;
 }
 
 .title {
