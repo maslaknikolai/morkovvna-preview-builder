@@ -1,11 +1,15 @@
 <template>
   <div
+    ref="imageSelectEl"
     class="image-select"
+    @mousedown="onMouseDown"
+    @mousemove="onMouseMove"
+    @touchstart="onTouchStart"
+    @touchmove="onTouchMove"
     :style="{
       backgroundPosition: `0 ${backgroundTopOffset}px`,
       backgroundImage: `url(${selectedImage})`,
     }"
-    ref="imageSelectEl"
   >
     <input
       ref="inputRef"
@@ -58,33 +62,42 @@ export default defineComponent({
 
     const backgroundTopOffset = ref(0)
 
-    const onMouseDown = (event: MouseEvent) => {
+    const mouseDown = (pageY: number) => {
       isMouseDown.value = true
-      mouseStartTopOffset.value = event.pageY
+      mouseStartTopOffset.value = pageY
       backgroundStartTopOffset.value = Number(
         window.getComputedStyle(imageSelectEl.value!)
           .backgroundPositionY
-          .replace(/[^-\d]/g, '')
+          .replace(/[^-\d.]/g, '')
       );
     }
+
+    const onMouseDown = (event: MouseEvent) => mouseDown(event.pageY)
+    const onTouchStart = (event: TouchEvent) => mouseDown(event.targetTouches[0].pageY)
 
     const onMouseUp = () => {
       isMouseDown.value = false
     }
 
-    const onMousemove = (event: MouseEvent) => {
+    const moveBg = (pageY: number) => {
         if (!isMouseDown.value) {
-            return
+          return
         }
 
-        const move = event.pageY - mouseStartTopOffset.value;
+        const move = pageY - mouseStartTopOffset.value;
         backgroundTopOffset.value = backgroundStartTopOffset.value + move
     }
 
+    const onTouchMove = (event: TouchEvent) => {
+      event.preventDefault()
+      moveBg(event.targetTouches[0].pageY)
+    }
+
+    const onMouseMove = (event: MouseEvent) => moveBg(event.pageY)
+
     onMounted(() => {
-      document.addEventListener('mousedown', onMouseDown)
+      document.addEventListener('touchend', onMouseUp)
       document.addEventListener('mouseup', onMouseUp)
-      document.addEventListener('mousemove', onMousemove)
     })
 
     return {
@@ -93,7 +106,11 @@ export default defineComponent({
       selectedImage,
       mouseStartTopOffset,
       backgroundTopOffset,
-      imageSelectEl
+      imageSelectEl,
+      onMouseDown,
+      onTouchStart,
+      onTouchMove,
+      onMouseMove,
     }
   }
 });
@@ -106,9 +123,10 @@ export default defineComponent({
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100%;
+  height: 600px;
   background-size: 100%;
   background-repeat: no-repeat;
+  width: 600px;
 }
 
 .file-input {

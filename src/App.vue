@@ -130,7 +130,8 @@ html, body {
 }
 
 .container {
-  margin: 0 auto;
+  margin: 40px auto;
+  width: 320px;
 }
 
 .result-wrapper {
@@ -140,6 +141,7 @@ html, body {
 .result {
   width: 600px;
   height: 600px;
+  zoom: 0.534;
   position: relative;
 }
 
