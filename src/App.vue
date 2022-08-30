@@ -132,6 +132,7 @@ html, body {
 .container {
   margin: 40px auto;
   width: 320px;
+  overflow: hidden;
 }
 
 .result-wrapper {
