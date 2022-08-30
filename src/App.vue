@@ -1,7 +1,10 @@
 <template>
   <div class="container">
     <div class="result-wrapper">
-      <div class="result">
+      <div
+        class="result"
+        ref="resultEl"
+      >
         <ImageSelect @imageSelected="onImageSelected()" />
         <BrandElements
           v-if="isImageSelected"
@@ -27,6 +30,13 @@
         type="number"
         class="field"
         v-model="titleSize"
+      />
+
+      <input
+        placeholder="Location"
+        type="text"
+        class="field"
+        v-model="location"
       />
 
       <input
@@ -59,6 +69,7 @@
 import { defineComponent, ref } from 'vue';
 import ImageSelect from './components/ImageSelect.vue';
 import BrandElements from './components/BrandElements.vue';
+import html2canvas from 'html2canvas'
 
 export default defineComponent({
   name: 'App',
@@ -79,8 +90,14 @@ export default defineComponent({
     const locationSize = ref(61)
     const rating = ref(5)
 
-    const saveImage = () => {
-      console.log(1);
+    const resultEl = ref<HTMLElement | null>(null)
+
+    const saveImage = async () => {
+      const canvas = await html2canvas(resultEl.value!);
+      canvas.toBlob(blob => {
+        // @ts-ignore
+        window.saveAs(blob, `${title.value}.png`);
+      });
     }
 
     return {
@@ -92,6 +109,7 @@ export default defineComponent({
       locationSize,
       rating,
       saveImage,
+      resultEl,
     }
   }
 });
