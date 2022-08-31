@@ -18,7 +18,7 @@
     </div>
 
     <div class="fields">
-      <input type="range" min="1" max="5" v-model="rating">
+      <input type="range" min="0.5" max="5" step="0.5" v-model="rating">
 
       <input
         placeholder="Title"
@@ -35,7 +35,7 @@
         v-model="location"
       />
 
-      <input type="range" min="80" max="220" v-model="locationSize">
+      <input type="range" min="80" max="220" v-model.number="locationSize">
 
       <button
         @click="saveImage()"

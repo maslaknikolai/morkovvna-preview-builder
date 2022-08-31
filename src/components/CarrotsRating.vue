@@ -1,15 +1,21 @@
 <template>
   <div class="carrots">
     <img
-      v-for="(it, i) in rating"
-      :key="{i}"
+      v-for="(it, i) in fullCarrotsCount"
+      :key="i"
       src="@/assets/carrot.png"
+    />
+
+    <img
+      v-if="hasHalfOfCarrot"
+      src="@/assets/carrot.png"
+      class="half-carrot"
     />
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from 'vue';
+import { computed, defineComponent, ref } from 'vue';
 
 export default defineComponent({
   name: 'CarrotsRating',
@@ -19,13 +25,21 @@ export default defineComponent({
       type: Number
     },
   },
-  setup() {
+  setup(props) {
     const inputRef = ref<HTMLElement | null>(null)
     const selectedImage = ref<string>('')
+
+    const fullCarrotsCount = computed(() => {
+      return Math.floor(props.rating)
+    })
+
+    const hasHalfOfCarrot = computed(() => Boolean(props.rating - fullCarrotsCount.value))
 
     return {
       inputRef,
       selectedImage,
+      fullCarrotsCount,
+      hasHalfOfCarrot,
     }
   }
 });
@@ -35,5 +49,9 @@ export default defineComponent({
 .carrots {
   display: flex;
   margin-bottom: 20px;
+}
+
+.half-carrot {
+  clip-path: polygon(0 20%, 0% 100%, 100% 100%);
 }
 </style>
