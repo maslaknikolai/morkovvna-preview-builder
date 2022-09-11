@@ -17,10 +17,24 @@
         fontSize: `${locationSize}px`
       }"
     >
-      <img
-        src="@/assets/location.png"
-        class="location-icon"
-      >
+      <div class="location-icon">
+        <img
+          src="@/assets/location.png"
+          class="location-icon__shadow"
+          :style="{
+            height: `${locationSize}px`
+          }"
+        >
+
+        <img
+          src="@/assets/location.png"
+          class="location-icon__img"
+          :style="{
+            height: `${locationSize}px`
+          }"
+        >
+      </div>
+
       {{location}}
     </div>
   </div>
@@ -101,5 +115,19 @@ export default defineComponent({
 .location-icon {
   position: relative;
   top: 6px;
+  display: inline-block;
+
+  &__img {
+    z-index: 2;
+    position: relative;
+  }
+
+  &__shadow {
+    position: absolute;
+    top: 4px;
+    left: 0;
+    filter: brightness(0);
+    z-index: 1;
+  }
 }
 </style>
